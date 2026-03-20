@@ -1,9 +1,6 @@
 # LearnPulse
 AI-powered knowledge assessment platform that generates personalized quizzes, analyzes skill gaps, and recommends tailored learning pathways using Gemini AI and Supabase.
 
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
 
 # LearnPulse: AI-Powered Knowledge Assessment & Recommendation
 
