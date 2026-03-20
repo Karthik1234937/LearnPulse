@@ -86,7 +86,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ user, theme, activeResult, viewedCour
     if (!input.trim() || loading) return;
 
     const userMessage = input.trim();
-    const apiKey = process.env.API_KEY;
+    const apiKey = import.meta.env.VITE_API_KEY;
     
     if (!apiKey) {
       setMessages(prev => [...prev, { role: 'user', text: userMessage }, { role: 'model', text: "API Key missing." }]);
