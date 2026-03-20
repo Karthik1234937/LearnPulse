@@ -228,3 +228,9 @@ src/
 2. Connect your repository to [Vercel](https://vercel.com)
 3. Set environment variables in Vercel dashboard
 4. Deploy automatically
+<<<<<<< HEAD
+=======
+
+
+**Made with ❤️ by the LearnPulse Team**
+>>>>>>> 57ab9aea552ecc8e6de703e21f60027e4ec0a074
