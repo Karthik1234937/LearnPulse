@@ -4,6 +4,23 @@ import { Send, X, MessageSquare, Loader2, Bot, ChevronRight } from 'lucide-react
 import { GoogleGenAI } from "@google/genai";
 import { ChatMessage, User, AssessmentResult, Course, QuizHistory } from '../types';
 
+// Rate limiting for ChatBot
+let lastChatRequestTime = 0;
+const MIN_CHAT_REQUEST_INTERVAL = 3000; // 3 seconds between chat requests
+
+const waitForChatRateLimit = () => {
+  const now = Date.now();
+  const timeSinceLastRequest = now - lastChatRequestTime;
+  
+  if (timeSinceLastRequest < MIN_CHAT_REQUEST_INTERVAL) {
+    const waitTime = MIN_CHAT_REQUEST_INTERVAL - timeSinceLastRequest;
+    return new Promise(resolve => setTimeout(resolve, waitTime));
+  }
+  
+  lastChatRequestTime = Date.now();
+  return Promise.resolve();
+};
+
 interface ChatBotProps {
   user: User | null;
   theme: 'light' | 'dark';
@@ -98,6 +115,9 @@ const ChatBot: React.FC<ChatBotProps> = ({ user, theme, activeResult, viewedCour
     setLoading(true);
 
     try {
+      // Rate limiting
+      await waitForChatRateLimit();
+      
       const ai = new GoogleGenAI({ apiKey });
       
       const contextSummary = `

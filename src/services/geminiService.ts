@@ -2,6 +2,23 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Question, Course, SkillScore, MistakeAnalysis } from "../types";
 
+// Rate limiting: Store last request time
+let lastRequestTime = 0;
+const MIN_REQUEST_INTERVAL = 2000; // 2 seconds between requests
+
+const waitForRateLimit = () => {
+  const now = Date.now();
+  const timeSinceLastRequest = now - lastRequestTime;
+  
+  if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
+    const waitTime = MIN_REQUEST_INTERVAL - timeSinceLastRequest;
+    return new Promise(resolve => setTimeout(resolve, waitTime));
+  }
+  
+  lastRequestTime = Date.now();
+  return Promise.resolve();
+};
+
 const getAI = () => {
   const apiKey = import.meta.env.VITE_API_KEY;
   if (!apiKey) throw new Error("Missing Gemini API Key (import.meta.env.VITE_API_KEY)");
@@ -13,6 +30,9 @@ export const generateQuiz = async (
   count: number = 10, 
   forcedDifficulty?: 'Beginner' | 'Intermediate' | 'Advanced'
 ): Promise<Question[]> => {
+  // Rate limiting
+  await waitForRateLimit();
+  
   const ai = getAI();
   
   const difficultyContext = forcedDifficulty 
